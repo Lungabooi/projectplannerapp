@@ -1,12 +1,12 @@
 <template>
-  <div class="project">
+  <div class="project" :class="{ complete: project.complete}">
     <div class="actions">
         <h3 @click="showDetails = !showDetails">{{project.title}}</h3>
     
     <div class="icons">
         <span class="material-symbols-outlined">edit</span>
-        <span @click="toggleComplete"  class="material-symbols-outlined">done</span>
         <span @click="deleteProject" class="material-symbols-outlined">delete</span>
+        <span @click="toggleComplete"  class="material-symbols-outlined">done</span>
     </div></div>
     <div v-if="showDetails" class="details"> 
         <p>{{project.details}}</p>
@@ -33,7 +33,11 @@ export default {
     },
     toggleComplete(){
         fetch(this.uri, { method: 'PATCH', 
-      headers:{ 'Content-Type': 'application/json'}})
+      headers:{ 'Content-Type': 'application/json'},
+      body: JSON.stringify({ complete: !this.ptoject.complete})})
+      .then(() => {
+        this.$emit('complete', this.project.id)
+      }).catch(err => console.log(err.message))
     }
  }
 
@@ -47,7 +51,7 @@ export default {
     padding: 10px 20px;
     border-radius: 4px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0 0.5);
-    border-left: 4px solid #e90074;
+    border-left: 4px solid #e94e06;
 }
 h3{
     cursor: pointer;
@@ -68,5 +72,7 @@ h3{
     justify-content: space-between;
     align-items: center;
 }
-
+.project.complete{
+    border-left: 4px solid rgb(208, 0, 255)
+}
 </style>
