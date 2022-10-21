@@ -33,7 +33,7 @@ export default{
   }, 
   handleComplete(id){
     let p = this.projects.find( project =>{
-      return project.id === id
+      return project.id == id
     })
     p.complete = !p.complete
   }
