@@ -8,7 +8,7 @@
         <span @click="deleteProject" class="material-symbols-outlined"
           >delete</span
         >
-        <span @click="toggleComplete" class="material-symbols-outlined"
+        <span @click="toggleComplete" class="material-symbols-outlined tick"
           >done</span
         >
       </div>
@@ -75,5 +75,9 @@ h3 {
 }
 .project.complete {
   border-left: 4px solid rgb(208, 0, 255);
+}
+
+.project.complete .tick {
+ color:  rgb(208, 0, 255);
 }
 </style>
