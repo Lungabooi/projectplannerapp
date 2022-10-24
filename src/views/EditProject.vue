@@ -1,53 +1,58 @@
 <template>
-    <div class="card">
+  <h1>Edit page</h1>
+  <h1>{{title}}</h1>
+  <h1>{{details}}</h1>
+
+  <div class="card">
   
-  <form @submit.prevent="handleSubmit">
-    <div class="field">
-     
-      <input autocomplete="off" placeholder="title" class="input-field" name="logemail" type="title" v-model="title" required>
+  <form @submit="handleSubmit" >
+    <div class="field"> 
+    <input autocomplete="off" placeholder="title" class="input-field" name="logemail" type="title" v-model="title" required>
     </div>
     <div class="field">
-    
-      <input autocomplete="off"  placeholder="details" class="input-field" name="details" type="details" v-model="details" required>
+    <input autocomplete="off"  placeholder="details" class="input-field" name="details" type="details" v-model="details" required>
     </div>
-    <button class="btn" @click="handleSubmit()">Add Project</button>
+    <button class="btn" @click="update()">Update Project</button>
    
   </form>
-
-</div>
-  
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            title:'',
-            details:''
-        }
-    }, 
-    methods: {
-        handleSubmit() {
-        let project = {
-            title: this.title,
-            details: this.details,
-            complete: false
-        }
-        fetch('http://localhost:3000/projects', {
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(project)
-        }).then(() => {
-            this.$router.push('/')
-        }).catch((err) => console.log(err))
-        }
-       
-    }
+  props: ["id"],
+  data() {
+    return {
+      title: "",
+      details: "",
+      uri: "http://localhost:3000/projects/" + this.id,
+    };
+  },mounted() {
+    fetch(this.uri)
+    .then(res => res.json())
+    .then(data => {
+        this.title = data.title;
+        this.details = data.details;
+    })
 
-}
+  },
+  
+  methods: {
+        handleSubmit() {
+      fetch(this.uri,{
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title: this.title, details:this.details})
+      }).then(() => {
+        this.$router.push('/')
+      }).catch(err => console.log(err))
+        }
+        
+}}
 </script>
 
 <style>
+
 /* From uiverse.io by @alexruix */
 .card {
  width: 100%;
